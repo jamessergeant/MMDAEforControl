@@ -22,10 +22,10 @@ NOTE: If intending to use the existing pretrained model, avoid downloading the D
 
 ### Unsupervised Learning (RBMs)
 1. Uncompress the contents of the Datasets folder.
-2.
+2. INCOMPLETE
 
 ### Fine-Tune Training (Deep Autoencoders)
-1.
+1. INCOMPLETE
 
 ### Operation
 1. Start `roscore`
