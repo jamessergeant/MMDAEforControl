@@ -5,7 +5,9 @@ Australian Centre for Robotic Vision
 Queensland University of Technology
 james.sergeant@qut.edu.au
 
-NOTE: This project relies on a forked version of PyLearn2 available at https://github.com/jamessergeant/pylearn2.git as well as it's dependencies. Other dependencies include ROS and Player Stage.
+DEPENDENCIES: This project relies on a forked version of PyLearn2 available at https://github.com/jamessergeant/pylearn2.git as well as it's dependencies. Other dependencies include ROS and Player Stage.
+
+DATASETS: If performing the training stages, obtain the datasets from http://bit.ly/MMDAEdata (521.14 Mb)
 
 Please note that the content is currently being edited for ease of use and will be used in the continued development of an end-to-end goal-based navigation system based on various machine learning methods.
 
@@ -20,11 +22,13 @@ Robot navigation systems are typically engineered to suit certain platforms, sen
 
 NOTE: If intending to use the existing pretrained model, avoid downloading the Datasets folder.
 
-### Unsupervised Learning (RBMs)
-1. Uncompress the contents of the Datasets folder.
+### Training
+
+#### Unsupervised Learning (RBMs)
+1. Obtain the datasets from http://bit.ly/MMDAEdata (521.14 Mb)
 2. INCOMPLETE
 
-### Fine-Tune Training (Deep Autoencoders)
+#### Fine-Tune Training (Deep Autoencoders)
 1. INCOMPLETE
 
 ### Operation
