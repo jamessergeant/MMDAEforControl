@@ -1,8 +1,8 @@
 # Multimodal Deep Autoencoders for Control of Mobile Robots
-James Sergeant
-Research Assistant
-Australian Centre for Robotic Vision
-Queensland University of Technology
+James Sergeant::
+Research Assistant::
+Australian Centre for Robotic Vision::
+Queensland University of Technology::
 james.sergeant@qut.edu.au
 
 DEPENDENCIES: This project relies on a forked version of PyLearn2 available at https://github.com/jamessergeant/pylearn2.git as well as it's dependencies. Other dependencies include ROS and Player Stage.
