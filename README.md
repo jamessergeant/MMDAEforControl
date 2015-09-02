@@ -1,4 +1,4 @@
-# MMDAEforControl
+# Multimodal Deep Autoencoders for Control of Mobile Robots
 James Sergeant
 Research Assistant
 Australian Centre for Robotic Vision
