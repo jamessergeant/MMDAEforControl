@@ -19,13 +19,26 @@ Robot navigation systems are typically engineered to suit certain platforms, sen
 ### Training
 
 #### Unsupervised Learning (RBMs)
-1. Obtain the datasets from http://bit.ly/MMDAEdata (521.14 Mb)
-2. INCOMPLETE
+1. Obtain the datasets from http://bit.ly/MMDAEdata (521.14 Mb) and place in Datasets folder.
+2. From the command line, run `python trainRBMs.py`. Note this may take some time to complete.
+3. The trained RBMs will be available in the RBMs folder and can be assessed with a variety of PyLearn2 tools.
 
 #### Fine-Tune Training (Deep Autoencoders)
-1. INCOMPLETE
+1. Obtain the datasets from http://bit.ly/MMDAEdata (521.14 Mb) and place in Datasets folder.
+2. From the command line, run `python trainDAEs.py`.
+3. The trained DAEs will be available in the DAEs folder and can be assessed with a variety of PyLearn2 tools.
 
 ### Operation
-1. Start `roscore`
-2. If operating on a Pioneer P3-DX, ensure the robot is located in a safe starting pose. Engage drive system.
-3. If operating with the Player Stage simulator, use `rosrun stage_ros stage ros $MMDAEforControl/simulator/worlds/complex/world.world`
+
+#### In Simulation
+1. Start `roscore`.
+2. If operating with the Player Stage simulator, use `rosrun stage_ros stage ros worlds/complex/world.world`. Other environments are available.
+3. From the command line, run `python operate.py MMAE-ZCI` where other models (MMAE-PGCI, SMAE) can be used.
+4. The system can be paused at anytime by pressing Enter.
+
+#### On a Pioneer P3-DX
+1. Connect to the Pioneer's roscore.
+2. Determine the laser scanners topic (e.g. /scan). This system currently only accepts 181 range measurements for a 180&deg; field of view.
+3. Ensure the robot is located in a safe starting pose. Engage drive system.
+4. From the command line, run `python operate.py MMAE-ZCI -t /scan` where other models (MMAE-PGCI, SMAE) can be used and /scan is the laser sensor topic. This loads the pretrained models supplied with the repository. To use alternate models, use `-m` and supply the filepath of the model.
+5. The system can be paused at anytime by pressing Enter.
