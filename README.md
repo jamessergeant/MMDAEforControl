@@ -20,8 +20,6 @@ Robot navigation systems are typically engineered to suit certain platforms, sen
 
 ## Instructions
 
-NOTE: If intending to use the existing pretrained model, avoid downloading the Datasets folder.
-
 ### Training
 
 #### Unsupervised Learning (RBMs)
