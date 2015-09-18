@@ -1,0 +1,137 @@
+!obj:pylearn2.train.Train {
+
+    dataset: &train !obj:customRBM.CustomMMPosterior {
+        which_set: "train",
+        model_file1: %(model1)s,
+        data_file1: %(data1)s,
+        model_file2: %(model2)s,
+        data_file2: %(data2)s,
+        batch_size: %(batch_size)i,
+        shuffle: True,
+        start: 0,
+        stop: 300000,
+    },
+
+    model: !obj:pylearn2.models.dbm.DBM {
+
+        batch_size: %(batch_size)i,
+        
+        niter: 1,
+
+        visible_layer: !obj:pylearn2.models.dbm.BinaryVector {
+
+            nvis: %(nvis)i,
+
+            bias_from_marginals: *train
+
+        },
+
+        hidden_layers: [
+
+            !obj:pylearn2.models.dbm.BinaryVectorMaxPool {
+
+                layer_name: 'h',
+
+                detector_layer_dim: %(hidden_layer_dim)i,
+
+                pool_size: 1,
+
+                irange: .05,
+
+                init_bias: -2.,
+
+            }
+
+       ]
+
+    },
+
+    algorithm: !obj:pylearn2.training_algorithms.sgd.SGD {
+
+               learning_rate: 1e-3,
+
+               learning_rule: !obj:pylearn2.training_algorithms.learning_rule.Momentum {
+                   init_momentum: 0.5,
+
+               },
+
+               monitoring_batches: %(monitoring_batches)i,
+
+              monitoring_dataset : {
+            'train' : *train,
+            'valid' : !obj:customRBM.CustomMMPosterior {
+                which_set: "valid",
+                model_file1: %(model1)s,
+                data_file1: %(data1)s,
+                model_file2: %(model2)s,
+                data_file2: %(data2)s,
+                batch_size: %(batch_size)i,
+                shuffle: True,
+                start: 300000,
+                stop: 360000,
+               },
+               },
+               monitoring_costs : {'mse':!obj:custom_monitor.monReconErr {}},
+
+               cost : !obj:pylearn2.costs.cost.SumOfCosts {
+
+                costs: [
+
+                        !obj:pylearn2.costs.dbm.VariationalPCD {
+
+                           num_chains: 100,
+                           num_gibbs_steps: 5
+
+                        },
+
+                        !obj:pylearn2.costs.dbm.WeightDecay {
+
+                          coeffs: [ .0001  ]
+
+                        },
+
+                        !obj:pylearn2.costs.dbm.TorontoSparsity {
+
+                         targets: [ .2 ],
+                         coeffs: [ .001 ],
+
+                        }
+
+                       ],
+
+           },
+
+           termination_criterion: !obj:pylearn2.termination_criteria.MonitorBased
+               {
+                        channel_name: "valid_mse",
+                        N: 100,
+                        prop_decrease: 0.
+
+           },
+
+           update_callbacks: [
+
+                !obj:pylearn2.training_algorithms.sgd.ExponentialDecay {
+
+                        decay_factor: 1.000015,
+                        min_lr:       0.0001
+
+                }
+
+           ]
+
+        },
+
+    extensions: [
+            !obj:pylearn2.train_extensions.best_params.MonitorBasedSaveBest {
+                        channel_name: "valid_mse",
+                        save_path: "%(save_path)s/%(type)s/%(type)s_%(laser_model_base)s_%(cmdvel_model_base)s_best.pkl"
+                }
+
+    ],
+
+    save_path: "%(save_path)s/%(type)s/%(type)s_%(laser_model_base)s_%(cmdvel_model_base)s.pkl",
+
+    save_freq : 1
+
+}

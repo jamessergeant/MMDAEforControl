@@ -14,7 +14,7 @@ This project relies on:
 * ROS (currently only tested on jade) and Player Stage.
 
 ###### Datasets
-If performing the training stages, obtain the datasets from http://bit.ly/MMDAEdata (521.14 Mb) and store in the Datasets folder.
+If performing the training stages, obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (521.14 Mb) and store in the Datasets folder.
 
 ###### Additional Information
 This repository has only ever been tested on Ubuntu 14.04 and ROS jade and may not operate correctly on other flavours of Linux or versions of ROS.
@@ -31,12 +31,12 @@ Feel free to contact James Sergeant at the email above if you are having any iss
 ### Training
 
 #### Unsupervised Learning (RBMs)
-1. Obtain the datasets from http://bit.ly/MMDAEdata (521.14 Mb) and place in Datasets folder.
+1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (521.14 Mb) and place in Datasets folder.
 2. From the command line, run `python trainRBMs.py`. Note this may take some time to complete.
 3. The trained RBMs will be available in the RBMs folder and can be assessed with a variety of PyLearn2 tools.
 
 #### Fine-Tune Training (Deep Autoencoders)
-1. Obtain the datasets from http://bit.ly/MMDAEdata (521.14 Mb) and place in Datasets folder.
+1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (521.14 Mb) and place in Datasets folder.
 2. From the command line, run `python trainDAEs.py`.
 3. The trained DAEs will be available in the DAEs folder and can be assessed with a variety of PyLearn2 tools.
 

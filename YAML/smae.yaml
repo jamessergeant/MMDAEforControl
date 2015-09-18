@@ -1,0 +1,173 @@
+!obj:pylearn2.train.Train {
+
+    dataset: &train !obj:customAE.CustomMMLoaderDropout {
+        laser_dataset: %(laser_dataset)s,
+        command_dataset: %(command_dataset)s,
+        normalise_1: 1,
+        normalise_2: 2,
+        sequence: %(sequence)i,
+        which_set: 'train',
+        start: 0,
+        stop: 300000,
+    },
+
+    model: !obj:pylearn2.models.mlp.MLP {
+
+        batch_size: %(batch_size)i,
+
+        layers: [
+            !obj:pylearn2.models.mlp.FlattenerLayer {
+                raw_layer: !obj:pylearn2.models.mlp.CompositeLayer {
+
+                    layer_name: 'first',
+
+                    layers: [
+
+                        !obj:pylearn2.models.mlp.Sigmoid {
+
+                            layer_name: 'h11',
+                            dim: %(h11_dim)i,
+                            irange: 0.05,
+
+                        },
+
+                    ],
+                    inputs_to_layers: {
+                        0: [0],
+                    }
+
+                },
+            },
+             !obj:pylearn2.models.mlp.Sigmoid {
+
+                    layer_name: 'second',
+                    dim: %(h2_dim)i,
+                    irange: 0.05,
+                },
+
+            !obj:customAE.SplitterLayer {
+                raw_layer: !obj:pylearn2.models.mlp.Sigmoid {
+
+                    layer_name: 'third',
+                    dim: %(h3_dim)i,
+                    irange: 0.05,
+                },
+                split: [%(h11_dim)i, %(h12_dim)i]
+
+            },
+
+            !obj:pylearn2.models.mlp.FlattenerLayer {
+                raw_layer: !obj:pylearn2.models.mlp.CompositeLayer {
+
+                    layer_name: 'fourth',
+
+                    layers: [
+
+                        !obj:pylearn2.models.mlp.LinearGaussian {
+                             init_bias: 1,
+                             init_beta: 1,
+                             min_beta: 1.,
+                             max_beta: 100.,
+                             beta_lr_scale: 1.,
+                             dim: %(nvis_laser)i,
+                             layer_name: 'h41',
+                             irange: .005,
+                             enc_layer: 'h11'
+
+                        },
+
+                        !obj:pylearn2.models.mlp.LinearGaussian {
+                             init_bias: 1,
+                             init_beta: 1,
+                             min_beta: 1.,
+                             max_beta: 100.,
+                             beta_lr_scale: 1.,
+                             dim: %(nvis_command)i,
+                             layer_name: 'h42',
+                             irange: .005,
+
+                        },
+
+                    ],
+                    inputs_to_layers: {
+                        0: [0],
+                        1: [1]
+                    }
+
+                },
+            },
+
+        ],
+
+        input_space: !obj:pylearn2.space.CompositeSpace {
+
+            components: [
+
+                !obj:pylearn2.space.VectorSpace {
+
+                    dim: %(nvis_laser)i,
+
+                },
+
+            ],
+
+        },
+
+        input_source: ['laser']
+
+    },
+
+    algorithm: !obj:pylearn2.training_algorithms.sgd.SGD {
+
+        learning_rate: 1e-3,
+
+        monitoring_dataset: {
+
+            'train': *train,
+            'valid' : !obj:customAE.CustomMMLoader {
+                        laser_dataset: %(laser_dataset)s,
+                        command_dataset: %(command_dataset)s,
+                        normalise_1: 1,
+                        normalise_2: 2,
+                        sequence: %(sequence)i,
+                        which_set: 'valid',
+                        start: 300000,
+                        stop: 360000,
+                      },
+
+        },
+
+            update_callbacks: [
+
+                !obj:pylearn2.training_algorithms.sgd.ExponentialDecay {
+
+                    decay_factor: 1.000015,
+                    min_lr:       0.0001
+
+                }
+            ],
+
+        cost: !obj:pylearn2.costs.mlp.dropout.Dropout {
+            # I think better off setting second, third and fourth include probs/scales to 1?
+             input_include_probs: { 'second' : 1.0, 'third' : 1.0, 'fourth' : 1.0 },
+             input_scales: { 'second' : 1.0, 'third' : 1.0, 'fourth' : 1.0 }
+        },
+
+        termination_criterion: !obj:pylearn2.termination_criteria.MonitorBased {
+            channel_name: "valid_fourth_h42_mse",
+            prop_decrease: 0.,
+            N: 100
+        },
+
+    },
+    extensions: [
+        !obj:pylearn2.train_extensions.best_params.MonitorBasedSaveBest {
+             channel_name: 'valid_fourth_h42_mse',
+             save_path: "%(save_path)s/%(type)s/%(laser_model_base)s_%(command_model_base)s_best.pkl",
+        },
+    ],
+
+    save_path: "%(save_path)s/%(type)s/%(laser_model_base)s_%(command_model_base)s.pkl",
+    save_freq: 1
+
+}
