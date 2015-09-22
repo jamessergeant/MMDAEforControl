@@ -1,6 +1,6 @@
 !obj:pylearn2.train.Train {
 
-    dataset: &train !obj:customRBM.CustomLoader {
+    dataset: &train !obj:custom.CustomLoader {
         which_set: "train",
         data_file: %(dataset)s,
         batch_size: %(batch_size)i,
@@ -59,7 +59,7 @@
 
     monitoring_dataset : {
       'train' : *train,
-            'valid' : !obj:customRBM.CustomLoader {
+            'valid' : !obj:custom.CustomLoader {
                     which_set: "valid",
                     data_file: %(dataset)s,
                     batch_size: %(batch_size)i,
@@ -71,7 +71,7 @@
                },
     },
 
-    monitoring_costs : {'mse':!obj:custom_monitor.monReconErr {}},
+    monitoring_costs : {'mse':!obj:custom.monReconErr {}},
 
     cost : !obj:pylearn2.costs.cost.SumOfCosts {
 

@@ -1,11 +1,10 @@
 import os
-from pylearn2.testing import skip
 from pylearn2.testing import no_debug_mode
 from pylearn2.config import yaml_parse
 import time
 from pylearn2.utils import serial
 from pylearn2.models.mlp import FlattenerLayer, CompositeLayer, Sigmoid, LinearGaussian
-from customAE import SplitterLayer
+from custom import SplitterLayer
 import numpy as N
 import theano
 

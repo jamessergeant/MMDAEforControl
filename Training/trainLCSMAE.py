@@ -1,11 +1,10 @@
 import os
-from pylearn2.testing import skip
 from pylearn2.testing import no_debug_mode
 from pylearn2.config import yaml_parse
 import time
 from pylearn2.utils import serial
 from pylearn2.models.mlp import FlattenerLayer, CompositeLayer, Sigmoid, LinearGaussian
-from customAE import SplitterLayer
+from custom import SplitterLayer
 import numpy as N
 import theano
 
@@ -54,7 +53,6 @@ def train_yaml(yaml_file):
                 if layer.enc_layer is None:
                     layer.set_weights(params[2].transpose().astype(f))
                 layer.set_biases(params[1].astype(f))
-                print type(model.get_params()[0].eval())
                 beta = model.get_params()[0].eval()
                 if isinstance(beta, N.ndarray):
                     layer.beta.set_value(model.get_params()[0].eval().astype(f))

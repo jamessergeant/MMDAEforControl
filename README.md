@@ -33,13 +33,19 @@ Feel free to contact James Sergeant at the email above if you are having any iss
 ### Training
 
 #### Unsupervised Learning (RBMs)
-1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (521.14 Mb) and place in Datasets folder.
-2. From the command line, run `python trainRBMs.py`. Note this may take some time to complete.
+1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (551.2 Mb), place npz file in Datasets folder and run `python extract_datasets.py`.
+2. From the command line, run:
+* `python Training/trainLaser.py`
+* `python Training/trainCommand.py`
+* `python Training/trainGoal.py` (ICRA only)
 3. The trained RBMs will be available in the RBMs folder and can be assessed with a variety of PyLearn2 tools.
 
 #### Fine-Tune Training (Deep Autoencoders)
-1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (521.14 Mb) and place in Datasets folder.
-2. From the command line, run `python trainDAEs.py`.
+1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (551.2 Mb). Place file in Datasets folder and run `python extract_datasets.py`.
+2. From the command line, run:
+* `python Training/trainLCMMAEs.py`
+* `python Training/trainLCSMAEs.py`
+* `python Training/trainGCMMAEs.py` (ICRA only)
 3. The trained DAEs will be available in the DAEs folder and can be assessed with a variety of PyLearn2 tools.
 
 ### Operation
@@ -47,10 +53,8 @@ Feel free to contact James Sergeant at the email above if you are having any iss
 #### In Simulation
 1. Start `roscore`.
 2. If operating with the Player Stage simulator, use `rosrun stage_ros stage ros worlds/complex/world.world`. Other environments are available.
-3. From the command line, run `python operate.py TYPE` where TYPE should be replaced with one of the following:
-* For ACRA: MMAE-ZCI, MMAE-PGCI, SMAE
-* For ICRA: ICRA
-4. The system can be paused at anytime by pressing Enter.
+3. From the command line, run `python ROS_nodes/DAE_node.py acra.xml` or `python ROS_nodes/DAE_node.py icra.xml`, as appropriate.
+<!-- 4. The system can be paused at anytime by pressing Enter. -->
 
 #### On a Pioneer P3-DX
 1. Connect to the Pioneer's roscore.

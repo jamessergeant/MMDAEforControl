@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<settings>
-  <model1 filename="laser_command_smae_best.pkl" />
-  <model2 filename="goal_command_smae_best.pkl" />
-  <goals tolerance="1.0" />
-</settings>

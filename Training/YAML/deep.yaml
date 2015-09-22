@@ -1,6 +1,6 @@
 !obj:pylearn2.train.Train {
 
-    dataset: &train !obj:customRBM.CustomMMPosterior {
+    dataset: &train !obj:custom.CustomMMPosterior {
         which_set: "train",
         model_file1: %(model1)s,
         data_file1: %(data1)s,
@@ -59,7 +59,7 @@
 
               monitoring_dataset : {
             'train' : *train,
-            'valid' : !obj:customRBM.CustomMMPosterior {
+            'valid' : !obj:custom.CustomMMPosterior {
                 which_set: "valid",
                 model_file1: %(model1)s,
                 data_file1: %(data1)s,
@@ -71,7 +71,7 @@
                 stop: 360000,
                },
                },
-               monitoring_costs : {'mse':!obj:custom_monitor.monReconErr {}},
+               monitoring_costs : {'mse':!obj:custom.monReconErr {}},
 
                cost : !obj:pylearn2.costs.cost.SumOfCosts {
 

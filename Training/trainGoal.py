@@ -1,7 +1,5 @@
 
 import os
-
-from pylearn2.testing import skip
 from pylearn2.testing import no_debug_mode
 from pylearn2.config import yaml_parse
 import time

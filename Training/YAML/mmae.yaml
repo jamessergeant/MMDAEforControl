@@ -1,6 +1,6 @@
 !obj:pylearn2.train.Train {
 
-    dataset: &train !obj:customMulti.CustomMMLoaderDropout {
+    dataset: &train !obj:custom.CustomMMLoaderDropout {
         datasets: [%(mode1_dataset)s, %(mode2_dataset)s],
         normalise: [1, 2],
         labels: ['mode1','mode2'],
@@ -53,7 +53,7 @@
                     irange: 0.05,
                 },
 
-            !obj:customAE.SplitterLayer {
+            !obj:custom.SplitterLayer {
                 raw_layer: !obj:pylearn2.models.mlp.Sigmoid {
 
                     layer_name: 'third',
@@ -140,7 +140,7 @@
         monitoring_dataset: {
 
             'train': *train,
-            'valid' : !obj:customMulti.CustomMMLoaderDropout {
+            'valid' : !obj:custom.CustomMMLoaderDropout {
                 datasets: [%(mode1_dataset)s, %(mode2_dataset)s],
                 normalise: [1, 2],
                 labels: ['mode1','mode2'],
