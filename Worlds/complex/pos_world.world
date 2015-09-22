@@ -1,0 +1,97 @@
+define guia_laser ranger
+(
+	sensor(
+		range [0.0 10]
+		fov 180
+		samples 181
+	)
+
+	block (
+		points 4
+		point[0] [1 0]
+		point[1] [0 1]
+		point[2] [-1 0]
+		point[3] [0 -1]
+		z [0 1]
+	)
+
+	color_rgba [0 0 1 0.3]
+	size [ 0.200 0.200 0.100 ]
+	pose [0.000 0.000 0.000 0.000]
+)
+
+define guiabot position
+(
+	# Shape of the robot
+	block
+	(
+		points 8
+		point[0] [1 0]
+		point[1] [0.707 0.707]
+		point[2] [0 1]
+		point[3] [-0.707 0.707]
+		point[4] [-1 0]
+		point[5] [-0.707 -0.707]
+		point[6] [0 -1]
+		point[7] [0.707 -0.707]
+
+		z [0 1]
+	)
+
+	# Fit shape to size
+	size [ 0.200 0.200 1.500 ]
+
+	# Force perfect odometry
+	localization "gps"
+
+	# Diff drive
+	drive "diff"
+)
+
+define floorplan model
+(
+	color "gray30"
+
+	boundary 1
+	gui_nose 0
+	gui_grid 0
+	gui_outline 0
+	gripper_return 0
+	fiducial_return 0
+	ranger_return 1.000
+)
+
+# Begin with settings
+resolution 0.01
+interval_sim 100
+
+window
+(
+  	size [ 1280 1000 ]
+
+  	center [ 0.000 0.000 ]
+  	scale 20.000
+
+	show_data 1
+	show_grid 1
+)
+
+floorplan
+(
+	# Specific S Block level 11 parameters from the floor plan
+  	name "Complex Corridor"
+  	bitmap "complex_world.png"
+  	size [ 40.000 40.000 2.000 ]
+	pose [ 0 0.000 0.000 0.000 ]
+)
+
+guiabot
+(
+	name "guiabot"
+	color "red"
+
+	pose [ -18 -18 0 45 ] 
+
+	guia_laser()
+
+)
