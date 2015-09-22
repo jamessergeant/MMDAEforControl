@@ -69,7 +69,7 @@ class DualDAE_node:
         self.acc_pub = rospy.Publisher("/accuracy",String, queue_size=10)
         self.data_pub = rospy.Publisher('/data', Float64MultiArray,queue_size=10)
 
-        self.scan_sub = rospy.Subscriber("/base_scan", numpy_msg(LaserScan), self.laser_callback)
+        self.scan_sub = rospy.Subscriber(settings.topic, numpy_msg(LaserScan), self.laser_callback)
         self.goal_sub = rospy.Subscriber("/goal", String, self.goal_callback)
         self.pose_sub = rospy.Subscriber("/amcl_pose", PoseWithCovarianceStamped, self.pose_callback)
         self.stall_sub = rospy.Subscriber("/stall", Bool, self.stall_callback)
@@ -190,8 +190,8 @@ def make_argument_parser():
 
     parser = argparse.ArgumentParser(description="Launch a prediction from a pkl file")
 
-    parser.add_argument('xml',
-                        help='Specifies the xml file containing settings')
+    parser.add_argument('xml', help='Specifies the xml file containing settings')
+    parser.add_argument('-t', dest='topic',default='/base_scan', help='Supply the appropriate laser sensor topic')
 
     return parser
 
@@ -204,4 +204,5 @@ if __name__ == '__main__':
     parser = make_argument_parser()
     args = parser.parse_args()
     settings = untangle.parse(args.xml)
+    settings.settings.topic = args.topic
     main(settings.settings)

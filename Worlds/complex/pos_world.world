@@ -39,7 +39,7 @@ define guiabot position
 	)
 
 	# Fit shape to size
-	size [ 0.200 0.200 1.500 ]
+	size [ 0.455 0.381 0.237 ]
 
 	# Force perfect odometry
 	localization "gps"
@@ -90,7 +90,7 @@ guiabot
 	name "guiabot"
 	color "red"
 
-	pose [ -18 -18 0 45 ] 
+	pose [ 18.0 -11.0 0 90.0 ]
 
 	guia_laser()
 

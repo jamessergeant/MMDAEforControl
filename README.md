@@ -13,7 +13,9 @@ This repository contains the software related to two papers under review:
 This project relies on:
 * A [forked version of PyLearn2](https://github.com/jamessergeant/pylearn2.git "Forked PyLearn2") as well as its dependencies including Theano.
 * A [forked version of the Stage ROS node](https://github.com/jamessergeant/stage_ros.git "Forked Stage ROS node") which publishes collisions as a Bool message on topic /stall.
-* ROS (currently only tested on jade) and Player Stage.
+* ROS (currently only tested on ROS Jade).
+
+It also relies on [Dijkstra's algorithm for shortest paths, David Eppstein, UC Irvine, 4 April 2002](http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/117228) and [Priority dictionary using binary heaps, David Eppstein, UC Irvine, 8 Mar 2002](http://code.activestate.com/recipes/117228-priority-dictionary/) which are included.
 
 ###### Datasets
 If performing the training stages, obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (521.14 Mb) and store in the Datasets folder.
@@ -28,12 +30,15 @@ Feel free to contact James Sergeant at the email above if you are having any iss
 ## Instructions
 
 ### Setup
-1. Run `source setup.sh` from the repository's main directory. This will set the necessary environment variables.
+1. Ensure the dependencies are installed.
+2. Run `. ./setup.sh` from the repository's main directory. This will set the necessary environment variables.
 
 ### Training
 
+The training stage can be bypassed by obtaining the [pretrained DAEs](http://linkdoesntexistyet.com "Pretrained DAEs") (FILE SIZE Mb). Place file in the DAEs folder and run `python $MMDAEdaes/extract_daes.py`.
+
 #### Unsupervised Learning (RBMs)
-1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (551.2 Mb), place npz file in Datasets folder and run `python extract_datasets.py`.
+1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (551.2 Mb). Place file in Datasets folder and run `python $MMDAEdata/extract_datasets.py`.
 2. From the command line, run:
   * `python Training/trainLaser.py`
   * `python Training/trainCommand.py`
@@ -41,24 +46,30 @@ Feel free to contact James Sergeant at the email above if you are having any iss
 3. The trained RBMs will be available in the RBMs folder and can be assessed with a variety of PyLearn2 tools.
 
 #### Fine-Tune Training (Deep Autoencoders)
-1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (551.2 Mb). Place file in Datasets folder and run `python extract_datasets.py`.
+1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (551.2 Mb). Place file in Datasets folder and run `python $MMDAEdata/extract_datasets.py`.
 2. From the command line, run:
-  * `python Training/trainLCMMAEs.py`
-  * `python Training/trainLCSMAEs.py`
-  * `python Training/trainGCMMAEs.py` (ICRA only)
+  * `python Training/trainLCMMAE.py`
+  * `python Training/trainLCSMAE.py`
+  * `python Training/trainGCSMAE.py` (ICRA only)
 3. The trained DAEs will be available in the DAEs folder and can be assessed with a variety of PyLearn2 tools.
 
 ### Operation
 
 #### In Simulation
 1. Start `roscore`.
-2. If operating with the Player Stage simulator, use `rosrun stage_ros stage ros worlds/complex/world.world`. Other environments are available.
-3. From the command line, run `python ROS_nodes/DAE_node.py acra.xml` or `python ROS_nodes/DAE_node.py icra.xml`, as appropriate.
-<!-- 4. The system can be paused at anytime by pressing Enter. -->
+2. For ACRA:
+  * `rosrun stage_ros stageros $MMDAE/Worlds/complex/pos_world.world`
+  * `python ROS_nodes/DAE_node.py ROS_nodes/acra.xml`
+3. For ICRA:
+  * `python Planner/goal_setter_grid.py`
+  * `rosrun stage_ros stageros $MMDAE/Worlds/grid/pos_world.world`
+  * `python ROS_nodes/DAE_node.py ROS_nodes/icra.xml`
 
 #### On a Pioneer P3-DX
 1. Connect to the Pioneer's roscore.
-2. Determine the laser scanners topic (e.g. /scan). This system currently only accepts 181 range measurements for a 180&deg; field of view.
+2. Determine the laser sensor topic (e.g. /scan). This system currently only accepts 181 range measurements for a 180&deg; field of view.
 3. Ensure the robot is located in a safe starting pose. Engage drive system.
-4. From the command line, run `python operate.py MMAE-ZCI -t /scan` where other models (MMAE-PGCI, SMAE) can be used and /scan is the laser sensor topic. This loads the pretrained models supplied with the repository. To use alternate models, use `-m` and supply the filepath of the model.
-5. The system can be paused at anytime by pressing Enter.
+4. From the command line, run (as appropriate):
+  * `python ROS_nodes/DAE_node.py ROS_nodes/acra.xml -t /scan`
+  * `python ROS_nodes/DAE_node.py ROS_nodes/icra.xml -t /scan`
+  To use alternate models, ensure the model pkl files are in the DAEs folder and edit the acra.xml or icra.xml files as appropriate.
