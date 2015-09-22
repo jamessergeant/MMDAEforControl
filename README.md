@@ -35,17 +35,17 @@ Feel free to contact James Sergeant at the email above if you are having any iss
 #### Unsupervised Learning (RBMs)
 1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (551.2 Mb), place npz file in Datasets folder and run `python extract_datasets.py`.
 2. From the command line, run:
-* `python Training/trainLaser.py`
-* `python Training/trainCommand.py`
-* `python Training/trainGoal.py` (ICRA only)
+  * `python Training/trainLaser.py`
+  * `python Training/trainCommand.py`
+  * `python Training/trainGoal.py` (ICRA only)
 3. The trained RBMs will be available in the RBMs folder and can be assessed with a variety of PyLearn2 tools.
 
 #### Fine-Tune Training (Deep Autoencoders)
 1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (551.2 Mb). Place file in Datasets folder and run `python extract_datasets.py`.
 2. From the command line, run:
-* `python Training/trainLCMMAEs.py`
-* `python Training/trainLCSMAEs.py`
-* `python Training/trainGCMMAEs.py` (ICRA only)
+  * `python Training/trainLCMMAEs.py`
+  * `python Training/trainLCSMAEs.py`
+  * `python Training/trainGCMMAEs.py` (ICRA only)
 3. The trained DAEs will be available in the DAEs folder and can be assessed with a variety of PyLearn2 tools.
 
 ### Operation
