@@ -1,7 +1,7 @@
 # Multimodal Deep Autoencoders for Control of Mobile Robots
 *James Sergeant, Research Assistant, Australian Centre for Robotic Vision, Queensland University of Technology, james.sergeant@qut.edu.au*
 
-###### PLEASE NOTE THAT THIS REPOSITORY IS CURRENTLY UNDERGOING AN UPDATE, PLEASE CHECK BACK AFTER 23 SEPTEMBER 2015
+###### PLEASE NOTE THAT THIS REPOSITORY IS CURRENTLY UNDERGOING AN UPDATE, PLEASE CHECK BACK AFTER 30 SEPTEMBER 2015
 
 This repository contains the software related to two papers under review:
 
