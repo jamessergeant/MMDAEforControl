@@ -18,7 +18,7 @@ This project relies on:
 It also relies on [Dijkstra's algorithm for shortest paths, David Eppstein, UC Irvine, 4 April 2002](http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/117228) and [Priority dictionary using binary heaps, David Eppstein, UC Irvine, 8 Mar 2002](http://code.activestate.com/recipes/117228-priority-dictionary/) which are included.
 
 ###### Datasets
-If performing the training stages, obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (521.14 Mb) and store in the Datasets folder.
+If performing the training stages, obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (551.2 Mb) and store in the Datasets folder.
 
 ###### Additional Information
 This repository has only ever been tested on Ubuntu 14.04 and ROS jade and may not operate correctly on other flavours of Linux or versions of ROS.
