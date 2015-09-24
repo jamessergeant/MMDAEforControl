@@ -58,10 +58,10 @@ The training stage can be bypassed by obtaining the [pretrained DAEs](http://lin
 #### In Simulation
 1. Start `roscore`.
 2. For ACRA:
-  * `rosrun stage_ros stageros $MMDAE/Worlds/complex/pos_world.world`
+  * `rosrun stage_ros stageros $MMDAE/Worlds/complex/pos_world.world` (edit the initial position in the pos_world.world file as desired)
   * `python ROS_nodes/DAE_node.py ROS_nodes/acra.xml`
 3. For ICRA:
-  * `python Planner/goal_setter_grid.py`
+  * `python Planner/goal_setter_grid.py`, wait until ready
   * `rosrun stage_ros stageros $MMDAE/Worlds/grid/pos_world.world`
   * `python ROS_nodes/DAE_node.py ROS_nodes/icra.xml`
 
@@ -73,3 +73,8 @@ The training stage can be bypassed by obtaining the [pretrained DAEs](http://lin
   * `python ROS_nodes/DAE_node.py ROS_nodes/acra.xml -t /scan`
   * `python ROS_nodes/DAE_node.py ROS_nodes/icra.xml -t /scan`
   To use alternate models, ensure the model pkl files are in the DAEs folder and edit the acra.xml or icra.xml files as appropriate.
+5. For the ICRA system:
+  * the ROS module map_server must be publishing a map of the area
+  * the ROS module AMCL must be publishing the robot's position on the topic /amcl_pose relative to the world frame
+  * before sending the first goal, ensure the robot is suitably localised within the environment (this can be visualised in RVIZ)
+  * to provide goals to the system, publish the x,y coordinates of the goal (in the world frame) as a comma delimited string on the /goal topic
