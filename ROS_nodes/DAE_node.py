@@ -27,9 +27,6 @@ class DualDAE_node:
 
         self.goals = GoalManager(settings)
 
-        self.dim = list()
-        self.inputs = list()
-
         self.laser1 = None
         self.goal1 = None
         self.command1 = None
@@ -78,8 +75,6 @@ class DualDAE_node:
         self.string_msg = String()
         self.data_msg = Float64MultiArray()
 
-        self.multiplier = 1.0
-
         print("\nAwaiting first goal!")
 
         time.sleep(2)
@@ -101,13 +96,8 @@ class DualDAE_node:
 
     def pose_callback(self,pose):
 
-        if not hasattr(self.dae2):
-            if not self.dae1.model.mmdae_type[1]:
-                return
-        else:
-            if not self.dae1.model.mmdae_type[1] and not self.dae2.model.mmdae_type[1]:
-                return
-
+        if self.goal1 is None and self.goal2 is None:
+            return
         # Convert pose to x,y,theta (from quaternion orientation)
         quaternion = N.asarray((pose.pose.pose.orientation.x, pose.pose.pose.orientation.y, pose.pose.pose.orientation.z, pose.pose.pose.orientation.w))
         pose = N.asarray([pose.pose.pose.position.x, pose.pose.pose.position.y,efq(quaternion)[2]])
@@ -121,8 +111,6 @@ class DualDAE_node:
 
             self.string_msg.data = str(self.goals.current_goal)
             self.goal_pub.publish(self.string_msg)
-
-            self.multiplier = self.goals.last_distance
 
     def laser_callback(self,laser):
 
@@ -145,7 +133,6 @@ class DualDAE_node:
             self.goal2.update(self.goals.relative_goal)
 
         x1, z1 = self.dae1.process(self.laser1,self.goal1,self.command1)
-
         x2,z2 = [0,0]
 
         factor = 1.0
@@ -159,7 +146,6 @@ class DualDAE_node:
 
         self.twist_msg.linear.x = factor*x1 + (1.0-factor)*x2
         self.twist_msg.angular.z = factor*z1 + (1.0-factor)*z2
-
         # Publish command
         self.cmd_pub.publish(self.twist_msg)
 

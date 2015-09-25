@@ -35,7 +35,7 @@ Feel free to contact James Sergeant at the email above if you are having any iss
 
 ### Training
 
-The training stage can be bypassed by obtaining the [pretrained DAEs](http://linkdoesntexistyet.com "Pretrained DAEs") (FILE SIZE Mb). Place file in the DAEs folder and run `python $MMDAEdaes/extract_daes.py`.
+The training stage can be bypassed by obtaining the [pretrained DAEs](http://bit.ly/daesMMDAE "Pretrained DAEs") (543.8 Mb). Place file in the DAEs folder and run `python $MMDAEdaes/extract_daes.py`.
 
 #### Unsupervised Learning (RBMs)
 1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (551.2 Mb). Place file in Datasets folder and run `python $MMDAEdata/extract_datasets.py`.

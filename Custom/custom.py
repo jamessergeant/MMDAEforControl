@@ -140,11 +140,6 @@ class monKurtosis(DefaultDataSpecsMixin, Cost):
         kurtosis = weights.shape[0]*weights.shape[1]*N.sum(N.power(error,4)) / N.power(N.sum(N.power(error,2)),2) - 3
         return T.TensorVariable(kurtosis)
 
-
-
-
-
-
 class CustomMMLoaderDropout(VectorSpacesDataset):
 
     def __init__(self,datasets,which_set,sequence=1,dropout=True,normalise=[],labels=[],shuffle=False,start=None,stop=None):
@@ -279,85 +274,6 @@ class CustomMMLoaderDropout(VectorSpacesDataset):
         data_specs = (CompositeSpace(vector_spaces), tuple(labels))
         super(CustomMMLoaderDropout,self).__init__(data=data,data_specs=data_specs)
 
-class CustomMMPosterior(DenseDesignMatrix):
-
-    def __init__(self, models, datasets, which_set, batch_size, shuffle=False,
-                 start=None, stop=None, axes=['b', 0, 1, 'c']):
-
-        self.args = locals()
-
-        assert which_set in ['train', 'valid']
-        assert type(models) is list
-        assert type(datasets) is list
-        assert len(models) == len(datasets)
-
-        def dimshuffle(b01c):
-            default = ('b', 0, 1, 'c')
-            return b01c.transpose(*[default.index(axis) for axis in axes])
-
-        for model, dataset in zip(models,datasets):
-
-            # Load single mode model for first layer
-            model = serial.load(model)
-            # Load the single mode data
-            dataset = N.load(dataset)
-            sequence = model.dataset_yaml_src.split('sequence: ')
-            if len(sequence) > 1:
-                sequence = int(sequence[1].split(',')[0])
-            else:
-                sequence = 1
-            if 'sequence_old' in locals():
-                assert sequence == sequence_old
-            sequence_old = sequence
-            if sequence != 1:
-                temp = dataset
-                dataset = np.zeros([temp.shape[0],sequence*temp.shape[1]])
-                for i in range(0,temp.shape[0]-sequence):
-                    dataset[i,:] = temp[i:i+sequence,:].reshape(1,sequence*temp.shape[1])
-                del temp
-            if start is not None:
-                assert stop is not None
-                assert start >= 0
-                assert stop > start
-                assert ((stop-start)%batch_size) == 0
-                if stop > dataset.shape[0]:
-                    raise ValueError('stop=' + str(stop) + '>' +
-                                     'm=' + str(self.X.shape[0]))
-                dataset = dataset[start:stop, :]
-                if dataset.shape[0] != stop - start:
-                    raise ValueError("X.shape[0]: %d. start: %d stop: %d"
-                                     % (self.X.shape[0], start, stop))
-
-            # Process data to get hidden representation from first layer
-            dataset = theano.shared(data)
-            dataset = model.mf(data)
-            dataset = dataset[0]
-            dataset = dataset[0]
-            dataset = dataset.eval()
-
-            if 'topo_view' not in locals():
-                topo_view = data.reshape(data.shape[0],1,data.shape[1])
-            else:
-                topo_view = N.append(topo_view, data.reshape(data.shape[0],1,data.shape[1]),axis=2)
-
-
-        m, r, c = topo_view.shape
-
-        topo_view = topo_view.reshape(m, r, c, 1)
-
-
-        if shuffle:
-            self.shuffle_rng = make_np_rng(
-                None, [1, 2, 3], which_method="shuffle")
-            for i in xrange(topo_view.shape[0]):
-                j = self.shuffle_rng.randint(m)
-                # Copy ensures that memory is not aliased.
-                tmp = topo_view[i, :, :, :].copy()
-                topo_view[i, :, :, :] = topo_view[j, :, :, :]
-                topo_view[j, :, :, :] = tmp
-        super(CustomMMPosterior, self).__init__(topo_view=dimshuffle(topo_view))
-
-        assert not N.any(N.isnan(self.X))
 
 class CustomLoader(DenseDesignMatrix):
 
@@ -426,18 +342,17 @@ class CustomLoader(DenseDesignMatrix):
 # For use in greedy layer-wise training of multi-modal deep layer RBM
 class CustomMMPosterior(DenseDesignMatrix):
 
-    def __init__(self, model_file1, data_file1, model_file2, data_file2, which_set, batch_size, shuffle=False,
+    def __init__(self, models, datasets, normalise, which_set, batch_size, shuffle=False,
                  start=None, stop=None, length=None,
                  axes=['b', 0, 1, 'c']):
 
         self.args = locals()
-        existing_data_path = os.environ['MMDAEdata'] + splitext(basename(model_file1))[0] + '_' + splitext(basename(data_file1))[0] + '_' + splitext(basename(model_file2))[0] + '_' + splitext(basename(data_file2))[0] + '_' + which_set +'.npy'
-        model_files = [model_file1, model_file2]
-        data_files = [data_file1, data_file2]
+        existing_data_path = os.environ['MMDAEdata'] + splitext(basename(models[0]))[0] + '_' + splitext(basename(datasets[0]))[0] + '_' + splitext(basename(models[1]))[0] + '_' + splitext(basename(datasets[1]))[0] + '_' + which_set + '.npy'
         assert which_set in ['train', 'valid']
-        assert type(model_files) is list
-        assert type(data_files) is list
-        assert len(model_files) == len(data_files)
+        assert type(models) is list
+        assert type(datasets) is list
+        assert len(models) == len(datasets)
+        assert len(models) == len(normalise)
 
         def dimshuffle(b01c):
             default = ('b', 0, 1, 'c')
@@ -445,11 +360,21 @@ class CustomMMPosterior(DenseDesignMatrix):
 
         # only process if it hasn't been done already
         if not os.path.exists(existing_data_path):
-            for ii in range(len(model_files)):
+            for ii in range(len(models)):
                 # Load single mode model for first layer
-                model = serial.load(model_files[ii])
+                model = serial.load(models[ii])
                 # Load the single mode data
-                data = N.load(data_files[ii])
+                data = N.load(datasets[ii])
+
+                if normalise[ii] == 1:
+                    data_mean = data.mean()
+                    data_std = data.std()
+                elif normalise[ii] == 2:
+                    data_mean = data.mean(axis=0)
+                    data_std = data.std(axis=0)
+
+                data = (data-data_mean) / data_std
+
                 sequence = model.dataset_yaml_src.split('sequence: ')
                 if len(sequence) > 1:
                     sequence = int(sequence[1].split(',')[0])
