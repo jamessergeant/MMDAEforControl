@@ -21,14 +21,14 @@ def train():
         hyper_params = {"hidden_layer_dim" : round(i*2*3),
     		    "monitoring_batches" : 20,
                 "batch_size" : 100,
-                "dataset" : os.environ['MMDAEdata'] + 'open_goal.npy',
+                "dataset" : os.environ['MMDAEdata'] + '/open_goal.npy',
                 "type" : 'goal',
     		    "save_path": os.environ['MMDAErbms'],
                 "sequence": i,
                 "nvis": 2*i,
                 "init_lr": 0.01,
                 "normalise": 2}
-        yaml = open(os.environ['MMDAEyaml'] + 'rbm_first.yaml', 'r').read()
+        yaml = open(os.environ['MMDAEyaml'] + '/rbm_first.yaml', 'r').read()
         yaml = yaml %(hyper_params)
         train_yaml(yaml)
         print (time.time() - start_time)

@@ -13,9 +13,9 @@ def train_yaml(yaml_file):
 
     train = yaml_parse.load(yaml_file)
 
-    mode1 = serial.load(os.environ['MMDAErbms'] + 'laser_best.pkl')
-    mode2 = serial.load(os.environ['MMDAErbms'] + 'command_best.pkl')
-    deep_model = serial.load(os.environ['MMDAErbms'] + 'laser_command_best.pkl')
+    mode1 = serial.load(os.environ['MMDAErbms'] + '/laser_best.pkl')
+    mode2 = serial.load(os.environ['MMDAErbms'] + '/command_best.pkl')
+    deep_model = serial.load(os.environ['MMDAErbms'] + '/laser_command_best.pkl')
 
     models = [mode1,mode2,deep_model,deep_model,mode1,mode2]
 
@@ -74,8 +74,8 @@ def train():
 
     mode2_dim = 2
 
-    hyper_params = {"mode1_dataset" : os.environ['MMDAEdata'] + 'short_laser.npy',
-        "mode2_dataset" : os.environ['MMDAEdata'] + 'short_command.npy',
+    hyper_params = {"mode1_dataset" : os.environ['MMDAEdata'] + '/short_laser.npy',
+        "mode2_dataset" : os.environ['MMDAEdata'] + '/short_command.npy',
         "sequence" : sequence,
         "batch_size" : 100,
         "nvis_mode1" : sequence*mode1_dim,
@@ -86,7 +86,7 @@ def train():
         "h3_dim": round(sequence*mode1_multiplier*mode1_dim*overcomplete_multiplier) + round(sequence*mode2_multiplier*mode2_dim*overcomplete_multiplier),
         "type" : 'laser_command_mmae',
         "save_path": os.environ['MMDAEdaes']}
-    yaml = open(os.environ['MMDAEyaml'] + 'mmae.yaml', 'r').read()
+    yaml = open(os.environ['MMDAEyaml'] + '/mmae.yaml', 'r').read()
     yaml = yaml %(hyper_params)
     train_yaml(yaml)
     print (time.time() - start_time)

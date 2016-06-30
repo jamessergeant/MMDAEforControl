@@ -21,14 +21,14 @@ def train():
         hyper_params = {"hidden_layer_dim" : round(i*181*1.5),
     		    "monitoring_batches" : 20,
                 "batch_size" : 100,
-                "dataset" : os.environ['MMDAEdata'] + 'endless_laser.npy',
+                "dataset" : os.environ['MMDAEdata'] + '/endless_laser.npy',
                 "type" : 'laser',
     		    "save_path": os.environ['MMDAErbms'],
                 "sequence": i,
                 "nvis": 181*i,
                 "init_lr": 0.001,
                 "normalise": 1}
-        yaml = open(os.environ['MMDAEyaml'] + 'rbm_first.yaml', 'r').read()
+        yaml = open(os.environ['MMDAEyaml'] + '/rbm_first.yaml', 'r').read()
         yaml = yaml %(hyper_params)
         train_yaml(yaml)
         print (time.time() - start_time)

@@ -179,11 +179,11 @@
     extensions: [
         !obj:pylearn2.train_extensions.best_params.MonitorBasedSaveBest {
              channel_name: 'valid_fourth_h42_mse',
-             save_path: "%(save_path)s%(type)s_best.pkl",
+             save_path: "%(save_path)s/%(type)s_best.pkl",
         },
     ],
 
-    save_path: "%(save_path)s%(type)s.pkl",
+    save_path: "%(save_path)s/%(type)s.pkl",
     save_freq: 1
 
 }
