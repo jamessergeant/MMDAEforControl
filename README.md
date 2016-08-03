@@ -5,7 +5,7 @@
 
 This repository contains the software related to two papers under review:
 
-"[Multimodal Deep Autoencoders for Control of Mobile Robots](http://bit.ly/acraMMDAE "Multimodal Deep Autoencoders for Control of Mobile Robots")", presented at the Australasian Conference on Robotics and Automation 2015. Citation:
+"[Multimodal Deep Autoencoders for Control of Mobile Robots](http://bit.ly/MMDAEacra "Multimodal Deep Autoencoders for Control of Mobile Robots")", presented at the Australasian Conference on Robotics and Automation 2015. Citation:
 
 ```
 @inproceedings{sergeantmultimodal,
@@ -16,7 +16,7 @@ This repository contains the software related to two papers under review:
 }
 ```
 
-"[Learned Goal-oriented Navigation for Mobile Robots Using Multimodal Deep Autoencoders](http://bit.ly/icraMMDAE "Learned Goal-oriented Navigation for Mobile Robots Using Multimodal Deep Autoencoders")", submitted 15 September 2015 to the International Conference on Robotics and Automation 2016.
+"[Learned Goal-oriented Navigation for Mobile Robots Using Multimodal Deep Autoencoders](http://bit.ly/MMDAEicra "Learned Goal-oriented Navigation for Mobile Robots Using Multimodal Deep Autoencoders")", submitted 15 September 2015 to the International Conference on Robotics and Automation 2016.
 
 ###### Dependencies
 This project relies on:
@@ -44,7 +44,7 @@ Feel free to contact James Sergeant at the email above if you are having any iss
 
 ### Training
 
-The training stage can be bypassed by obtaining the [pretrained DAEs](http://bit.ly/daesMMDAE "Pretrained DAEs") (543.8 Mb). Place file in the DAEs folder and run `python $MMDAEdaes/extract_daes.py`.
+The training stage can be bypassed by obtaining the [pretrained DAEs](http://bit.ly/MMDAEdaes "Pretrained DAEs") (543.8 Mb). Place file in the DAEs folder and run `python $MMDAEdaes/extract_daes.py`.
 
 #### Unsupervised Learning (RBMs)
 1. Obtain the [datasets](http://bit.ly/MMDAEdata "MMDAE datasets") (551.2 Mb). Place file in Datasets folder and run `python $MMDAEdata/extract_data.py`.
