@@ -16,7 +16,7 @@ This repository contains the software related to two papers under review:
 }
 ```
 
-"[Learned Goal-oriented Navigation for Mobile Robots Using Multimodal Deep Autoencoders](http://bit.ly/MMDAEicra "Learned Goal-oriented Navigation for Mobile Robots Using Multimodal Deep Autoencoders")", submitted 15 September 2015 to the International Conference on Robotics and Automation 2016.
+"[Learned Goal-oriented Navigation for Mobile Robots Using Multimodal Deep Autoencoders](http://bit.ly/MMDAEicra "Learned Goal-oriented Navigation for Mobile Robots Using Multimodal Deep Autoencoders")", submitted 15 September 2015 to the International Conference on Robotics and Automation 2016 (REJECTED).
 
 ###### Dependencies
 This project relies on:
